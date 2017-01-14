@@ -10,10 +10,10 @@ public class RobotMap {
 	public static int rsRightAxisY = 5;
 	
 	//CAN
-	public static final int talonMasterLeft = 0;
-	public static final int talonMasterRight = 1;
-	public static final int talonFrontLeft = 2;
-	public static final int talonFrontRight = 3;
-	public static final int talonBackLeft = 4;
-	public static final int talonBackRight = 5;
+	public static final int talonDriveMasterLeft = 0;
+	public static final int talonDriveMasterRight = 1;
+	public static final int talonDriveFrontLeft = 2;
+	public static final int talonDriveFrontRight = 3;
+	public static final int talonDriveBackLeft = 4;
+	public static final int talonDriveBackRight = 5;
 }

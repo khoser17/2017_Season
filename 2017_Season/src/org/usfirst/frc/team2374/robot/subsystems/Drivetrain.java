@@ -8,36 +8,35 @@ import com.ctre.CANTalon.FeedbackDevice;
 import com.ctre.CANTalon.TalonControlMode;
 import com.kauailabs.navx.frc.AHRS;
 
-import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Drivetrain extends Subsystem {
 	
 	CANTalon masterLeft, masterRight, fLeft, fRight, bLeft, bRight;
-	RobotDrive robotDrive;
+	TalonControlMode mode;
 	AHRS navX;
 
 	public Drivetrain() {
-		masterLeft = new CANTalon(RobotMap.talonMasterLeft);
-		masterRight = new CANTalon(RobotMap.talonMasterRight);
-		fLeft = new CANTalon(RobotMap.talonFrontLeft);
-		fRight = new CANTalon(RobotMap.talonFrontRight);
-		bLeft = new CANTalon(RobotMap.talonBackLeft);
-		bRight = new CANTalon(RobotMap.talonBackRight);		
+		masterLeft = new CANTalon(RobotMap.talonDriveMasterLeft);
+		masterRight = new CANTalon(RobotMap.talonDriveMasterRight);
+		fLeft = new CANTalon(RobotMap.talonDriveFrontLeft);
+		fRight = new CANTalon(RobotMap.talonDriveFrontRight);
+		bLeft = new CANTalon(RobotMap.talonDriveBackLeft);
+		bRight = new CANTalon(RobotMap.talonDriveBackRight);		
 
 		fLeft.changeControlMode(TalonControlMode.Follower);
 		fRight.changeControlMode(TalonControlMode.Follower);
 		bLeft.changeControlMode(TalonControlMode.Follower);
 		bRight.changeControlMode(TalonControlMode.Follower);
-		fLeft.set(0);
-		fRight.set(0);
-		bLeft.set(1);
-		bRight.set(1);
+		fLeft.set(RobotMap.talonDriveMasterLeft);
+		fRight.set(RobotMap.talonDriveMasterRight);
+		bLeft.set(RobotMap.talonDriveMasterLeft);
+		bRight.set(RobotMap.talonDriveMasterRight);
 		
 		masterLeft.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		masterRight.setFeedbackDevice(FeedbackDevice.CtreMagEncoder_Relative);
 		
-		robotDrive = new RobotDrive(masterLeft, masterRight);
+		mode = TalonControlMode.PercentVbus;
 	}
 
 	@Override
@@ -45,8 +44,16 @@ public class Drivetrain extends Subsystem {
 		setDefaultCommand(new DriveWithJoystick());
 	}
 	
+	private void changeTalonMode(TalonControlMode m) {
+		masterLeft.changeControlMode(m);
+		masterRight.changeControlMode(m);
+	}
+	
 	public void tankDrive(double left, double right) {
-		robotDrive.tankDrive(left, right);
+		if (!mode.equals(TalonControlMode.PercentVbus))
+			changeTalonMode(TalonControlMode.PercentVbus);
+		masterLeft.set(left);
+		masterRight.set(right);
 	}
 
 }
